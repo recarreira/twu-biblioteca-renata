@@ -6,8 +6,8 @@ In order to easily add more functionality in the future as well as maintain a hi
 The requirements for the first release of Biblioteca are given below.
 
 ##User Stories
-- __Welcome Message__ - As a customer, I would like to see a welcome message when I start the application, so that I feel welcome and know that Biblioteca is available.
-- __List Books__ - As a customer, after the welcome message appears I would like to see a list of all library books, so that I can browse for books I might want to check-out. Assume that there is a pre-existing list of books. You don't need to support adding or removing books from the library.
+- ~~__Welcome Message__~~ - As a customer, I would like to see a welcome message when I start the application, so that I feel welcome and know that Biblioteca is available.
+- ~~__List Books__~~ - As a customer, after the welcome message appears I would like to see a list of all library books, so that I can browse for books I might want to check-out. Assume that there is a pre-existing list of books. You don't need to support adding or removing books from the library.
 - __Book Details__ - As a customer, I'd like the list of all books to include each books Author and Year Published, so that I can be confident that I have found the book I am looking for. The book listing should have columns for this information.
 - __Main Menu__  - As a customer, instead of automatically seeing the book list, I would like to see a list of options and be able to choose one. For now, the only option should be 'List Books'. All future options should be added to this menu also.
 - __Invalid Menu__ Option - As a customer, I would like to be notified when I choose an invalid option with the message “Select a valid option!”, so that I can know when I need to re-enter my choice.
