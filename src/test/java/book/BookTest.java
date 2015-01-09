@@ -26,7 +26,7 @@ public class BookTest {
     public void printBookDetailsShouldPrintNameYearAndAuthorOnColumns() throws FileNotFoundException {
         String bookDetail = testUtilities.txtFileContentToString("src/test/data/bookDetails.txt");
         Book book = new Book("Learning TDD", "Cool Girl", 2015);
-        book.printBookDetails();
+        book.printBookDetails(12);
         assertEquals(bookDetail, log.getLog());
     }
 

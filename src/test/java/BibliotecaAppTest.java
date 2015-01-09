@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import static org.junit.Assert.*;
@@ -18,6 +19,7 @@ public class BibliotecaAppTest {
 
     BibliotecaApp biblioteca;
     TestUtilities testUtilities;
+    Book book1, book2, book3;
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -26,27 +28,22 @@ public class BibliotecaAppTest {
     public void setUp() throws Exception {
         biblioteca = new BibliotecaApp();
         testUtilities = new TestUtilities();
+        biblioteca.createDefaultBookObjects();
+
     }
 
     @Test
     public void UserShouldSeeAWelcomeMessage() {
         biblioteca.welcomeMessage();
 
-        assertEquals("Welcome!", log.getLog());
+        assertEquals("Welcome!\n", log.getLog());
     }
 
     @Test
-    public void booksShouldBePrintedOnTheScreen() throws FileNotFoundException {
-        String listOfBooks = testUtilities.txtFileContentToString("src/test/data/bookList.txt");
-        biblioteca.printBookList();
-
-        assertEquals(listOfBooks, log.getLog());
-    }
-
     public void bookListDetailsShouldPrintedAsColumns() throws FileNotFoundException {
-        String bookDetails = testUtilities.txtFileContentToString("src/test/data/booksListWithDetails.txt");
+        String bookDetails = testUtilities.txtFileContentToString("src/test/data/bookListWithDetails.txt");
 
-        biblioteca.printBooKDetailsAsColumn();
+        biblioteca.printBooKListDetails();
 
         assertEquals(bookDetails, log.getLog());
     }
