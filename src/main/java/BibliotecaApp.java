@@ -27,4 +27,6 @@ public class BibliotecaApp {
     }
 
 
+    public void printBooKDetailsAsColumn() {
+    }
 }
