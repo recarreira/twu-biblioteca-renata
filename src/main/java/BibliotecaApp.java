@@ -15,7 +15,7 @@ public class BibliotecaApp {
 
 
 
-   public static ArrayList<Book> bookList = new ArrayList<Book>();
+    public static ArrayList<Book> bookList = new ArrayList<Book>();
 
 
     public static void main(String[] args) {
@@ -62,7 +62,11 @@ public class BibliotecaApp {
                 printBooKListDetails();
                 break;
             case 2:
-                String bookTitle;
+                Scanner text = new Scanner(System.in);
+                System.out.println("Type book title: ");
+                String bookTitle= text.nextLine();
+                checkout(bookTitle);
+                break;
             case 0:
                 System.exit(1);
                 break;
@@ -84,28 +88,37 @@ public class BibliotecaApp {
         printMenu();
 
         while (true){
-            option = in.nextInt();
-            menuOptions(option);
-            System.out.println();
-            printMenu();
-        }
+            try {
+                option = in.nextInt();
+                menuOptions(option);
+                System.out.println();
+                printMenu();
+            }catch (Exception e){
+                System.out.println("Invalid Option!");
+                menu();
+            }
+
+         }
     }
 
-    public boolean checkout(String bookTitle) {
+    public static boolean checkout(String bookTitle) {
         int position = findObjectPosition(bookTitle);
         if (position != - 1) {
-            this.bookList.remove(position);
+
+            bookList.remove(position);
+            System.out.println("Thank you! Enjoy the book");
             return true;
         }else {
+            System.out.println("That book is not available");
             return false;
         }
     }
 
-    public int findObjectPosition(String bookTitle){
+    public static int findObjectPosition(String bookTitle){
         int i = 0;
         int position = -1;
 
-        for (Book objBook:this.bookList){
+        for (Book objBook:bookList){
             if(objBook.getTitle().equals(bookTitle)){
                 position = i;
                 break;

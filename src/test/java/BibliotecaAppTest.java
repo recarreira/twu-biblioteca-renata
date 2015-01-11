@@ -71,14 +71,24 @@ public class BibliotecaAppTest {
 
     @Test
     public void bibliotecaShouldFindThePositionForAValidBookName(){
-        assertEquals(0, biblioteca.findObjectPosition("Learning TDD"));
+        assertEquals(2, biblioteca.findObjectPosition("Another awesome book"));
     }
 
     @Test
     public void bookShouldBeRemovedFromBookListAfterCheckout() {
-        ArrayList<Book> bookListClone = biblioteca.bookList;
-        bookListClone.remove(2);
+        assertEquals(true, biblioteca.checkout("Another awesome book"));
+    }
+
+    @Test
+    public void successMessageShouldBePrintedAfterSuccessfulCheckout(){
+
         biblioteca.checkout("Another awesome book");
-        assertEquals(bookListClone, biblioteca.bookList);
+        assertEquals("Thank you! Enjoy the book.\n", log.getLog());
+    }
+
+    @Test
+    public void unccessfulMessageShouldBePrintedAfterAnUnsuccessfulCheckout(){
+        biblioteca.checkout("We dont have this book");
+        assertEquals("That book is not available\n", log.getLog());
     }
 }
