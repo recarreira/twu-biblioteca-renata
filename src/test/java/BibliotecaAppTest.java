@@ -5,13 +5,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 import utils.TestUtilities;
-
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+
 
 import static org.junit.Assert.*;
 
@@ -48,6 +43,7 @@ public class BibliotecaAppTest {
 
     @Test
     public void bookListDetailsShouldBePrintedByChoose1OnMenu() throws FileNotFoundException {
+        log.clear();
         String bookDetails = testUtilities.txtFileContentToString("src/test/data/bookListWithDetails.txt");
         biblioteca.menuOptions(1);
 
@@ -71,24 +67,51 @@ public class BibliotecaAppTest {
 
     @Test
     public void bibliotecaShouldFindThePositionForAValidBookName(){
-        assertEquals(2, biblioteca.findObjectPosition("Another awesome book"));
+        assertEquals(2, biblioteca.findObjectPosition("Another awesome book", biblioteca.bookList));
     }
 
     @Test
-    public void bookShouldBeRemovedFromBookListAfterCheckout() {
+    public  void bookShouldBeRemovedFromBookListAfterCheckout() {
         assertEquals(true, biblioteca.checkout("Another awesome book"));
     }
 
     @Test
     public void successMessageShouldBePrintedAfterSuccessfulCheckout(){
-
         biblioteca.checkout("Another awesome book");
-        assertEquals("Thank you! Enjoy the book.\n", log.getLog());
+
+        assertEquals("Thank you! Enjoy the book\n", log.getLog());
     }
 
     @Test
     public void unccessfulMessageShouldBePrintedAfterAnUnsuccessfulCheckout(){
         biblioteca.checkout("We dont have this book");
+
         assertEquals("That book is not available\n", log.getLog());
+    }
+
+    @Test
+    public void bookShouldBeAddedToBookListAfterReturnBook(){
+        Book book = new Book("Checked out book", "someone", 2010);
+        BibliotecaApp bibliotecaApp = new BibliotecaApp();
+        bibliotecaApp.checkedOutBooks.add(book);
+
+        assertEquals(true, bibliotecaApp.returnBook("Checked out book"));
+    }
+
+    @Test
+    public void successMessageShouldBePrintedAfterSuccessfulReturnBook(){
+        Book book = new Book("Checked out book", "someone", 2010);
+        BibliotecaApp bibliotecaApp = new BibliotecaApp();
+        bibliotecaApp.checkedOutBooks.add(book);
+        bibliotecaApp.returnBook("Checked out book");
+
+        assertEquals("Thank you for returning the book\n", log.getLog());
+    }
+
+    @Test
+    public void unccessfulMessageShouldBePrintedAfterAnUnsuccessfulReturn(){
+        biblioteca.returnBook("We dont have this book");
+
+        assertEquals("That is not a valid book to return\n", log.getLog());
     }
 }

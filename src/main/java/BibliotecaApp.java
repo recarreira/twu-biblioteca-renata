@@ -1,11 +1,5 @@
 import book.Book;
-import org.junit.Assert;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -16,32 +10,34 @@ public class BibliotecaApp {
 
 
     public static ArrayList<Book> bookList = new ArrayList<Book>();
+    public static ArrayList<Book> checkedOutBooks = new ArrayList<Book>();
 
 
     public static void main(String[] args) {
-        createDefaultBookObjects();
-        welcomeMessage();
-        menu();
+        BibliotecaApp bibliotecaApp = new BibliotecaApp();
+        bibliotecaApp.createDefaultBookObjects();
+        bibliotecaApp.welcomeMessage();
+        bibliotecaApp.menu();
     }
 
-    public static void welcomeMessage(){
+    public void welcomeMessage(){
         System.out.println("Welcome!");
     }
 
-    public static void printBooKListDetails() {
+    public void printBooKListDetails() {
         int length = bookListMaxLengthString(bookList);
         for (Book objBook : bookList){
             objBook.printBookDetails(length);
         }
     }
 
-    public static void createDefaultBookObjects(){
+    public void createDefaultBookObjects(){
         bookList.add(new Book("Learning TDD", "Cool Girl", 2015));
         bookList.add(new Book("Awesome book", "author with huge name", 2014));
         bookList.add(new Book("Another awesome book", "myself", 2013));
     }
 
-    public static int bookListMaxLengthString(ArrayList<Book> arrayList){
+    public int bookListMaxLengthString(ArrayList<Book> arrayList){
         int max = 0;
         for(Book objBook:arrayList){
             if (objBook.getTitle().length() > max ){
@@ -56,16 +52,23 @@ public class BibliotecaApp {
     }
 
 
-    public static void menuOptions(int option) {
+    public String readBookName(){
+        Scanner text = new Scanner(System.in);
+        System.out.println("Type book title: ");
+        String bookTitle= text.nextLine();
+        return bookTitle;
+    }
+
+    public void menuOptions(int option) {
         switch (option) {
             case 1:
                 printBooKListDetails();
                 break;
             case 2:
-                Scanner text = new Scanner(System.in);
-                System.out.println("Type book title: ");
-                String bookTitle= text.nextLine();
-                checkout(bookTitle);
+                checkout(readBookName());
+                break;
+            case 3:
+                returnBook(readBookName());
                 break;
             case 0:
                 System.exit(1);
@@ -75,14 +78,15 @@ public class BibliotecaApp {
         }
     }
 
-    public static void printMenu(){
+    public void printMenu(){
         System.out.println("Choose an option:");
         System.out.println("1 - Books List");
         System.out.println("2 - Checkout Book");
+        System.out.println("3 - Return Book");
         System.out.println("0 - Quit");
     }
 
-    public static void menu(){
+    public void menu(){
         Scanner in = new Scanner(System.in);
         int option = 0;
         printMenu();
@@ -101,11 +105,13 @@ public class BibliotecaApp {
          }
     }
 
-    public static boolean checkout(String bookTitle) {
-        int position = findObjectPosition(bookTitle);
+    public boolean checkout(String bookTitle) {
+        int position = findObjectPosition(bookTitle, bookList);
         if (position != - 1) {
 
+            checkedOutBooks.add(bookList.get(position));
             bookList.remove(position);
+
             System.out.println("Thank you! Enjoy the book");
             return true;
         }else {
@@ -114,11 +120,11 @@ public class BibliotecaApp {
         }
     }
 
-    public static int findObjectPosition(String bookTitle){
+    public int findObjectPosition(String bookTitle, ArrayList<Book> listOfBooks){
         int i = 0;
         int position = -1;
 
-        for (Book objBook:bookList){
+        for (Book objBook:listOfBooks){
             if(objBook.getTitle().equals(bookTitle)){
                 position = i;
                 break;
@@ -126,5 +132,20 @@ public class BibliotecaApp {
             i++;
         }
         return position;
+    }
+
+    public boolean returnBook(String bookTitle) {
+        int position = findObjectPosition(bookTitle, checkedOutBooks);
+        if (position != - 1) {
+
+            bookList.add(checkedOutBooks.get(position));
+            checkedOutBooks.remove(position);
+
+            System.out.println("Thank you for returning the book");
+            return true;
+        }else {
+            System.out.println("That is not a valid book to return");
+            return false;
+        }
     }
 }
