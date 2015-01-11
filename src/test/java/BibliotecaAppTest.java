@@ -19,7 +19,6 @@ public class BibliotecaAppTest {
 
     BibliotecaApp biblioteca;
     TestUtilities testUtilities;
-    Book book1, book2, book3;
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -29,7 +28,6 @@ public class BibliotecaAppTest {
         biblioteca = new BibliotecaApp();
         testUtilities = new TestUtilities();
         biblioteca.createDefaultBookObjects();
-
     }
 
     @Test
@@ -48,5 +46,39 @@ public class BibliotecaAppTest {
         assertEquals(bookDetails, log.getLog());
     }
 
+    @Test
+    public void bookListDetailsShouldBePrintedByChoose1OnMenu() throws FileNotFoundException {
+        String bookDetails = testUtilities.txtFileContentToString("src/test/data/bookListWithDetails.txt");
+        biblioteca.menuOptions(1);
 
+        assertEquals(bookDetails, log.getLog());
+    }
+
+    @Test
+    public void anErrorShouldBeDisplayedForInvalidOptionOnMenu(){
+        biblioteca.menuOptions(10);
+
+        assertEquals("Invalid Option!\n", log.getLog());
+    }
+
+    @Test
+    public void menuShouldBePrinted() throws FileNotFoundException {
+        String menu = testUtilities.txtFileContentToString("src/test/data/menu.txt");
+        biblioteca.printMenu();
+
+        assertEquals(menu, log.getLog());
+    }
+
+    @Test
+    public void bibliotecaShouldFindThePositionForAValidBookName(){
+        assertEquals(0, biblioteca.findObjectPosition("Learning TDD"));
+    }
+
+    @Test
+    public void bookShouldBeRemovedFromBookListAfterCheckout() {
+        ArrayList<Book> bookListClone = biblioteca.bookList;
+        bookListClone.remove(2);
+        biblioteca.checkout("Another awesome book");
+        assertEquals(bookListClone, biblioteca.bookList);
+    }
 }
