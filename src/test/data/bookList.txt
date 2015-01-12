@@ -1,3 +1,0 @@
-Learning TDD
-Awesome book
-Another awesome book

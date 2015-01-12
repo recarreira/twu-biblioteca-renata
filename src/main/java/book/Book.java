@@ -39,5 +39,16 @@ public class Book {
         System.out.println(this.title + whitespaceTitle +" | " + this.author + whitespaceAuthor + " | " + this.year);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Book){
+            Book c = (Book) o;
+            if (this.title.equals(c.title) && this.author.equals(c.author) && this.year == c.year){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }

@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
-import utils.BibliotecaUtils;
 import utils.TestUtilities;
 
 import java.io.FileNotFoundException;
@@ -15,7 +14,7 @@ public class BibliotecaCLITest {
 
     Biblioteca biblioteca;
     BibliotecaCLI bibliotecaCLI;
-    TestUtilities testUtilities;
+    String bookDetails;
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -23,46 +22,48 @@ public class BibliotecaCLITest {
     @Before
     public void setUp() throws Exception {
         biblioteca = new Biblioteca();
+        TestUtilities.populateBiblioteca(biblioteca);
         bibliotecaCLI = new BibliotecaCLI(biblioteca);
-        testUtilities = new TestUtilities();
-        BibliotecaUtils.createDefaultBookObjects(biblioteca);
+        bookDetails =   "Learning TDD          | Cool Girl             | 2015\n" +
+                        "Awesome book          | author with huge name | 2014\n" +
+                        "Another awesome book  | myself                | 2013\n";
     }
 
     @Test
-    public void UserShouldSeeAWelcomeMessage() {
+    public void printsWelcomeMessage() {
         bibliotecaCLI.welcomeMessage();
 
-        assertEquals("Welcome!\n", log.getLog());
+        assertEquals(Biblioteca.Messages.WELCOME + "\n", log.getLog());
     }
 
     @Test
-    public void bookListDetailsShouldPrintedAsColumns() throws FileNotFoundException {
-        String bookDetails = testUtilities.txtFileContentToString("src/test/data/bookListWithDetails.txt");
-
+    public void printsBookListDetailsAsColumns(){
         biblioteca.printBooKListDetails();
 
         assertEquals(bookDetails, log.getLog());
     }
 
     @Test
-    public void bookListDetailsShouldBePrintedByChoose1OnMenu() throws FileNotFoundException {
-        log.clear();
-        String bookDetails = TestUtilities.txtFileContentToString("src/test/data/bookListWithDetails.txt");
+    public void printsBookListDetailsByChoosingMenuOption1(){
         bibliotecaCLI.menuOptions(1);
 
         assertEquals(bookDetails, log.getLog());
     }
 
     @Test
-    public void anErrorShouldBeDisplayedForInvalidOptionOnMenu(){
+    public void printsErrorForInvalidMenuOption(){
         bibliotecaCLI.menuOptions(10);
 
-        assertEquals("Invalid Option!\n", log.getLog());
+        assertEquals(Biblioteca.Messages.INVALID_OPTION + "\n", log.getLog());
     }
 
     @Test
-    public void menuShouldBePrinted() throws FileNotFoundException {
-        String menu = TestUtilities.txtFileContentToString("src/test/data/menu.txt");
+    public void printsMenu() throws FileNotFoundException {
+        String menu =   "Choose an option:\n" +
+                        "1 - Books List\n" +
+                        "2 - Checkout Book\n" +
+                        "3 - Return Book\n" +
+                        "0 - Quit\n";
         bibliotecaCLI.printMenu();
 
         assertEquals(menu, log.getLog());

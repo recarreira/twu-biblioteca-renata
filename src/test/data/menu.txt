@@ -1,5 +1,0 @@
-Choose an option:
-1 - Books List
-2 - Checkout Book
-3 - Return Book
-0 - Quit

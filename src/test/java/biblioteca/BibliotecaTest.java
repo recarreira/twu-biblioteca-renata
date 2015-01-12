@@ -5,15 +5,24 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
-import utils.BibliotecaUtils;
 import utils.TestUtilities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class BibliotecaTest {
 
     BibliotecaCLI bibliotecaCLI;
     Biblioteca biblioteca;
+
+    Book aBook = new Book("Learning TDD", "Cool Girl", 2015);
+    Book anotherBook = new Book("Awesome book", "author with huge name", 2014);
+    Book yetAnotherBook = new Book("Another awesome book", "myself", 2013);
+    Book newBook = new Book("New book", "someone", 2010);
+
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -22,55 +31,100 @@ public class BibliotecaTest {
     public void setUp() throws Exception {
         biblioteca = new Biblioteca();
         bibliotecaCLI = new BibliotecaCLI(biblioteca);
-        BibliotecaUtils.createDefaultBookObjects(biblioteca);
+        TestUtilities.populateBiblioteca(biblioteca);
+
     }
 
     @Test
-    public void bibliotecaShouldFindThePositionForAValidBookName(){
+    public void findsPositionForValidBookName(){
         assertEquals(2, biblioteca.findBookObjectPositionByName("Another awesome book", biblioteca.bookList));
     }
 
     @Test
-    public void bookShouldBeRemovedFromBookListAfterCheckout() {
-        assertEquals(true, biblioteca.checkout("Another awesome book"));
+    public void returnsTrueForSuccessfulCheckout() {
+        assertThat(biblioteca.checkout("Another awesome book"), is(true));
+
     }
 
     @Test
-    public void successMessageShouldBePrintedAfterSuccessfulCheckout(){
+    public void returnsFalseForUnsuccessfulCheckout(){
+        assertThat(biblioteca.checkout("Unavailable book"), is(false));
+    }
+
+    @Test
+    public void printsSuccessMessageAfterSuccessfulCheckout(){
         biblioteca.checkout("Another awesome book");
 
-        assertEquals("Thank you! Enjoy the book\n", log.getLog());
+        assertEquals(Biblioteca.Messages.SUCCESSFUL_CHECKOUT + "\n", log.getLog());
     }
 
     @Test
-    public void unccessfulMessageShouldBePrintedAfterAnUnsuccessfulCheckout(){
-        biblioteca.checkout("We dont have this book");
-
-        assertEquals("That book is not available\n", log.getLog());
+    public void removesBookFromBookListAfterCheckout(){
+        ArrayList<Book> books = new ArrayList<Book>(Arrays.asList(aBook, yetAnotherBook));
+        biblioteca.checkout("Awesome book");
+        assertEquals(books, biblioteca.bookList);
     }
 
     @Test
-    public void bookShouldBeAddedToBookListAfterReturnBook(){
-        Book book = new Book("Checked out book", "someone", 2010);
-        biblioteca.checkedOutBooks.add(book);
+    public void addsBookToCheckedOutListAftercheckout(){
+        ArrayList<Book> books = new ArrayList<Book>(Arrays.asList(aBook));
+        biblioteca.checkout("Learning TDD");
 
-        assertEquals(true, biblioteca.returnBook("Checked out book"));
+        assertEquals(books, biblioteca.checkedOutBooks);
     }
 
     @Test
-    public void successMessageShouldBePrintedAfterSuccessfulReturnBook(){
-        Book book = new Book("Checked out book", "someone", 2010);
-        biblioteca.checkedOutBooks.add(book);
-        biblioteca.returnBook("Checked out book");
+    public void printsUnsuccessfulMessageAfterUnsuccessfulCheckout(){
+        biblioteca.checkout("We don't have this book");
 
-        assertEquals("Thank you for returning the book\n", log.getLog());
+        assertEquals(Biblioteca.Messages.UNSUCCESSFUL_CHECKOUT + "\n", log.getLog());
     }
 
     @Test
-    public void unccessfulMessageShouldBePrintedAfterAnUnsuccessfulReturn() {
+    public void returnsTrueForSuccessfulReturnBook(){
+        biblioteca.checkedOutBooks.add(newBook);
+        assertThat(biblioteca.returnBook("New book"),is(true));
+    }
+
+    @Test
+    public void returnsFalseIfReturnBookFail(){
+        assertThat(biblioteca.returnBook("Never checked out book"), is(false));
+    }
+
+    @Test
+    public void addsBookToBookListAfterReturnBook(){
+        ArrayList<Book> books = new ArrayList<Book>(Arrays.asList(aBook, anotherBook, yetAnotherBook, newBook));
+
+        biblioteca.checkedOutBooks.add(newBook);
+
+        biblioteca.returnBook("New book");
+
+        assertEquals(books, biblioteca.bookList);
+    }
+
+
+    @Test
+    public void printsSuccessMessageAfterSuccessfulReturnBook(){
+        biblioteca.checkedOutBooks.add(newBook);
+        biblioteca.returnBook("New book");
+
+        assertEquals(Biblioteca.Messages.SUCCESSFUL_RETURN +"\n", log.getLog());
+    }
+
+    @Test
+    public void removesBookFromCheckedOutListAfterReturnBook() {
+        biblioteca.checkedOutBooks.add(newBook);
+        biblioteca.returnBook("New book");
+        ArrayList<Book> books = new ArrayList<Book>();
+
+        assertEquals(books, biblioteca.checkedOutBooks);
+    }
+
+    @Test
+    public void printsUnsuccessfulMessageAfterUnsuccessfulReturn() {
         biblioteca.returnBook("We dont have this book");
 
-        assertEquals("That is not a valid book to return\n", log.getLog());
+        assertEquals(Biblioteca.Messages.UNSUCCESSFUL_RETURN + "\n", log.getLog());
 
     }
 }

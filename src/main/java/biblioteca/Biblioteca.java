@@ -8,7 +8,15 @@ import java.util.ArrayList;
  * Created by rcarreira on 1/11/15.
  */
 public class Biblioteca {
+    public static class Messages {
+        public static final String WELCOME = "Welcome!";
+        public static final String UNSUCCESSFUL_CHECKOUT = "That book is not available";
+        public static final String INVALID_OPTION = "Invalid Option!";
+        public static final String SUCCESSFUL_RETURN = "Thank you for returning the book";
+        public static final String SUCCESSFUL_CHECKOUT = "Thank you! Enjoy the book";
+        public static final String UNSUCCESSFUL_RETURN = "That is not a valid book to return";
 
+    }
     public ArrayList<Book> bookList = new ArrayList<Book>();
     public ArrayList<Book> checkedOutBooks = new ArrayList<Book>();
 
@@ -40,10 +48,10 @@ public class Biblioteca {
             checkedOutBooks.add(bookList.get(position));
             bookList.remove(position);
 
-            System.out.println("Thank you! Enjoy the book");
+            System.out.println(Messages.SUCCESSFUL_CHECKOUT);
             return true;
         }else {
-            System.out.println("That book is not available");
+            System.out.println(Messages.UNSUCCESSFUL_CHECKOUT);
             return false;
         }
     }
@@ -69,10 +77,10 @@ public class Biblioteca {
             bookList.add(checkedOutBooks.get(position));
             checkedOutBooks.remove(position);
 
-            System.out.println("Thank you for returning the book");
+            System.out.println(Messages.SUCCESSFUL_RETURN);
             return true;
         }else {
-            System.out.println("That is not a valid book to return");
+            System.out.println(Messages.UNSUCCESSFUL_RETURN);
             return false;
         }
     }

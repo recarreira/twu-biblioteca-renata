@@ -7,6 +7,7 @@ import java.util.Scanner;
  */
 public class BibliotecaCLI {
 
+
     Biblioteca biblioteca;
 
     public BibliotecaCLI(Biblioteca biblioteca) {
@@ -14,13 +15,13 @@ public class BibliotecaCLI {
     }
 
     public void welcomeMessage(){
-        System.out.println("Welcome!");
+        System.out.println(Biblioteca.Messages.WELCOME);
     }
 
     public String readBookName(){
         Scanner text = new Scanner(System.in);
         System.out.println("Type book title: ");
-        String bookTitle= text.nextLine();
+        String bookTitle = text.nextLine();
         return bookTitle;
     }
 
@@ -39,7 +40,7 @@ public class BibliotecaCLI {
                 System.exit(1);
                 break;
             default:
-                System.out.println("Invalid Option!");
+                System.out.println(Biblioteca.Messages.INVALID_OPTION);
         }
     }
 
@@ -63,7 +64,7 @@ public class BibliotecaCLI {
                 System.out.println();
                 printMenu();
             }catch (Exception e){
-                System.out.println("Invalid Option!");
+                System.out.println(Biblioteca.Messages.INVALID_OPTION);
                 menu();
             }
 

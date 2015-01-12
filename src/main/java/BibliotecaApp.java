@@ -1,7 +1,6 @@
 import biblioteca.Biblioteca;
 import biblioteca.BibliotecaCLI;
 import book.Book;
-import utils.BibliotecaUtils;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,14 +10,21 @@ import java.util.Scanner;
  */
 public class BibliotecaApp {
 
-    public static void main(String[] args) {
-        Biblioteca biblioteca = new Biblioteca();
+    private static Biblioteca biblioteca;
 
-        BibliotecaUtils.createDefaultBookObjects(biblioteca);
+    public static void main(String[] args) {
+        biblioteca = new Biblioteca();
+        populate();
 
         BibliotecaCLI bibliotecaCLI = new BibliotecaCLI(biblioteca);
         bibliotecaCLI.welcomeMessage();
         bibliotecaCLI.menu();
+    }
+
+    public static void populate(){
+        biblioteca.bookList.add(new Book("Learning TDD", "Cool Girl", 2015));
+        biblioteca.bookList.add(new Book("Awesome book", "author with huge name", 2014));
+        biblioteca.bookList.add(new Book("Another awesome book", "myself", 2013));
     }
 
 }
