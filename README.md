@@ -5,4 +5,4 @@ In order to easily add more functionality in the future as well as maintain a hi
 
 ----
 
-With [FFrancieli](https://github.com/FFrancieli)
+Contributors: [Renata Carreira](https://github.com/recarreira) and [Francieli Viane](https://github.com/FFrancieli)
