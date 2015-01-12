@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class TestUtilities {
 
-    public String txtFileContentToString(String path) throws FileNotFoundException {
+    public static String txtFileContentToString(String path) throws FileNotFoundException {
         Scanner scanner = new Scanner(new FileReader(path));
         String str = "";
         while (scanner.hasNext()){
