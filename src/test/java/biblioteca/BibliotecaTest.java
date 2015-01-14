@@ -1,11 +1,11 @@
 package biblioteca;
 
 import book.Book;
+import movie.Movie;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
-import utils.TestUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +23,10 @@ public class BibliotecaTest {
     Book yetAnotherBook = new Book("Another awesome book", "myself", 2013);
     Book newBook = new Book("New book", "someone", 2010);
 
+    Movie aMovie = new Movie("Some movie", "Some Pretty Director", 2012, 10);
+    Movie anotherMovie = new Movie("Another movie", "Just a Director", 2001, 0);
+    Movie yetAnotherMovie = new Movie("Just another movie", "Unknown Director", 2009, 3);
+
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -31,53 +35,54 @@ public class BibliotecaTest {
     public void setUp() throws Exception {
         biblioteca = new Biblioteca();
         bibliotecaCLI = new BibliotecaCLI(biblioteca);
-        TestUtilities.populateBiblioteca(biblioteca);
+        BibliotecaData.populateWithBooks(biblioteca);
+        BibliotecaData.populateWithMovies(biblioteca);
 
     }
 
     @Test
-    public void findsPositionForValidBookName(){
+    public void findsPositionForValidBookTitle(){
         assertEquals(2, biblioteca.findBookObjectPositionByName("Another awesome book", biblioteca.bookList));
     }
 
     @Test
-    public void returnsTrueForSuccessfulCheckout() {
-        assertThat(biblioteca.checkout("Another awesome book"), is(true));
+    public void returnsTrueForSuccessfulCheckoutBook() {
+        assertThat(biblioteca.checkoutBook("Another awesome book"), is(true));
 
     }
 
     @Test
-    public void returnsFalseForUnsuccessfulCheckout(){
-        assertThat(biblioteca.checkout("Unavailable book"), is(false));
+    public void returnsFalseForUnsuccessfulCheckoutBook(){
+        assertThat(biblioteca.checkoutBook("Unavailable book"), is(false));
     }
 
     @Test
-    public void printsSuccessMessageAfterSuccessfulCheckout(){
-        biblioteca.checkout("Another awesome book");
+    public void printsSuccessMessageAfterSuccessfulBookCheckout(){
+        biblioteca.checkoutBook("Another awesome book");
 
-        assertEquals(Biblioteca.Messages.SUCCESSFUL_CHECKOUT + "\n", log.getLog());
+        assertEquals(Biblioteca.Messages.CHECKOUT_BOOK + "\n", log.getLog());
     }
 
     @Test
-    public void removesBookFromBookListAfterCheckout(){
+    public void removesBookFromBookListAfterCheckoutBook(){
         ArrayList<Book> books = new ArrayList<Book>(Arrays.asList(aBook, yetAnotherBook));
-        biblioteca.checkout("Awesome book");
+        biblioteca.checkoutBook("Awesome book");
         assertEquals(books, biblioteca.bookList);
     }
 
     @Test
-    public void addsBookToCheckedOutListAftercheckout(){
+    public void addsBookToCheckedOutListAftercheckoutBook(){
         ArrayList<Book> books = new ArrayList<Book>(Arrays.asList(aBook));
-        biblioteca.checkout("Learning TDD");
+        biblioteca.checkoutBook("Learning TDD");
 
         assertEquals(books, biblioteca.checkedOutBooks);
     }
 
     @Test
-    public void printsUnsuccessfulMessageAfterUnsuccessfulCheckout(){
-        biblioteca.checkout("We don't have this book");
+    public void printsUnsuccessfulMessageAfterUnsuccessfulCheckoutBook(){
+        biblioteca.checkoutBook("We don't have this book");
 
-        assertEquals(Biblioteca.Messages.UNSUCCESSFUL_CHECKOUT + "\n", log.getLog());
+        assertEquals(Biblioteca.Messages.UNSUCCESSFUL_BOOK_CHECKOUT + "\n", log.getLog());
     }
 
     @Test
@@ -121,10 +126,46 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void printsUnsuccessfulMessageAfterUnsuccessfulReturn() {
+    public void printsUnsuccessfulMessageAfterUnsuccessfulReturnBook() {
         biblioteca.returnBook("We dont have this book");
 
         assertEquals(Biblioteca.Messages.UNSUCCESSFUL_RETURN + "\n", log.getLog());
 
+    }
+
+    @Test
+    public void findsPositionForValidMovieName(){
+        assertEquals(2, biblioteca.findMovieObjectPositionByName("Just another movie", biblioteca.movieList));
+    }
+
+    @Test
+    public void returnsTrueForSuccessfulCheckoutMovie(){
+        assertThat(biblioteca.checkoutMovie("Another movie"), is(true));
+    }
+
+    @Test
+    public void returnsFalseIfCheckoutMovieFail(){
+        assertThat(biblioteca.checkoutMovie("Not a movie"), is(false));
+    }
+
+    @Test
+    public void removesMovieFromMovieListAfterCheckoutMovie(){
+        ArrayList<Movie> movies = new ArrayList<Movie>(Arrays.asList(aMovie, yetAnotherMovie));
+        biblioteca.checkoutMovie("Another movie");
+        assertEquals(movies, biblioteca.movieList);
+    }
+
+    @Test
+    public void printsSuccessMessageAfterSuccessfulMovieCheckout(){
+        biblioteca.checkoutMovie("Just another movie");
+
+        assertEquals(Biblioteca.Messages.CHECKOUT_MOVIE + "\n", log.getLog());
+    }
+
+    @Test
+    public void printsUnsuccessfulMessageAfterUnsuccessfulCheckoutMovie(){
+        biblioteca.checkoutMovie("Not a movie");
+
+        assertEquals(Biblioteca.Messages.UNSUCCESSFUL_MOVIE_CHECKOUT + "\n", log.getLog());
     }
 }

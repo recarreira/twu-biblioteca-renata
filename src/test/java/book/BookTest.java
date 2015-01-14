@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
-import utils.TestUtilities;
 
 import java.io.FileNotFoundException;
 

@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
-import utils.TestUtilities;
 
 import java.io.FileNotFoundException;
 
@@ -22,7 +21,7 @@ public class BibliotecaCLITest {
     @Before
     public void setUp() throws Exception {
         biblioteca = new Biblioteca();
-        TestUtilities.populateBiblioteca(biblioteca);
+        BibliotecaData.populateWithBooks(biblioteca);
         bibliotecaCLI = new BibliotecaCLI(biblioteca);
         bookDetails =   "Learning TDD          | Cool Girl             | 2015\n" +
                         "Awesome book          | author with huge name | 2014\n" +

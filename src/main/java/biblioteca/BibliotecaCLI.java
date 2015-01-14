@@ -31,7 +31,7 @@ public class BibliotecaCLI {
                 biblioteca.printBooKListDetails();
                 break;
             case 2:
-                biblioteca.checkout(readBookName());
+                biblioteca.checkoutBook(readBookName());
                 break;
             case 3:
                 biblioteca.returnBook(readBookName());
