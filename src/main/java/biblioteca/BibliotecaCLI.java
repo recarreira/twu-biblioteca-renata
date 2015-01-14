@@ -18,9 +18,9 @@ public class BibliotecaCLI {
         System.out.println(Biblioteca.Messages.WELCOME);
     }
 
-    public String readBookName(){
+    public String readString(){
         Scanner text = new Scanner(System.in);
-        System.out.println("Type book title: ");
+        System.out.println("Type the title: ");
         String bookTitle = text.nextLine();
         return bookTitle;
     }
@@ -31,10 +31,16 @@ public class BibliotecaCLI {
                 biblioteca.printBooKListDetails();
                 break;
             case 2:
-                biblioteca.checkoutBook(readBookName());
+                biblioteca.checkoutBook(readString());
                 break;
             case 3:
-                biblioteca.returnBook(readBookName());
+                biblioteca.returnBook(readString());
+                break;
+            case 4:
+                biblioteca.printMovieListDetail();
+                break;
+            case 5:
+                biblioteca.checkoutMovie(readString());
                 break;
             case 0:
                 System.exit(1);
@@ -49,6 +55,8 @@ public class BibliotecaCLI {
         System.out.println("1 - Books List");
         System.out.println("2 - Checkout Book");
         System.out.println("3 - Return Book");
+        System.out.println("4 - Movies List");
+        System.out.println("5 - Checkout Movie");
         System.out.println("0 - Quit");
     }
 

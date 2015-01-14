@@ -57,11 +57,13 @@ public class BibliotecaCLITest {
     }
 
     @Test
-    public void printsMenu() throws FileNotFoundException {
+    public void printsMenu(){
         String menu =   "Choose an option:\n" +
                         "1 - Books List\n" +
                         "2 - Checkout Book\n" +
                         "3 - Return Book\n" +
+                        "4 - Movies List\n" +
+                        "5 - Checkout Movie\n" +
                         "0 - Quit\n";
         bibliotecaCLI.printMenu();
 
