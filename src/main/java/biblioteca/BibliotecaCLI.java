@@ -1,5 +1,9 @@
 package biblioteca;
 
+import book.Book;
+import movie.Movie;
+import user.User;
+
 import java.util.Scanner;
 
 /**
@@ -7,8 +11,9 @@ import java.util.Scanner;
  */
 public class BibliotecaCLI {
 
-
     Biblioteca biblioteca;
+    User user;
+
 
     public BibliotecaCLI(Biblioteca biblioteca) {
         this.biblioteca = biblioteca;
@@ -18,31 +23,42 @@ public class BibliotecaCLI {
         System.out.println(Biblioteca.Messages.WELCOME);
     }
 
-    public String readString(){
+    public String readString(String message){
         Scanner text = new Scanner(System.in);
-        System.out.println("Type the title: ");
-        String bookTitle = text.nextLine();
-        return bookTitle;
+        System.out.println(message);
+        return text.nextLine();
     }
 
     public void menuOptions(int option) {
         switch (option) {
             case 1:
-                biblioteca.printBooKListDetails();
+                printBooKList();
                 break;
             case 2:
-                biblioteca.checkoutBook(readString());
+                System.out.println(Biblioteca.Messages.LOGIN_TO_PROCEED);
+                biblioteca.checkoutBook(readString("Type book title: "));
                 break;
             case 3:
-                biblioteca.returnBook(readString());
+                //userLogin(Biblioteca.Messages.LOGIN_TO_PROCEED);
+                biblioteca.returnBook(readString("Type book title: "));
                 break;
             case 4:
-                biblioteca.printMovieListDetail();
+                printMovieList();
                 break;
             case 5:
-                biblioteca.checkoutMovie(readString());
+                biblioteca.checkoutMovie(readString("Type movie name: "));
+                break;
+            case 6:
+                //userLogin("");
+                break;
+            case 7:
+                //userLogin(Biblioteca.Messages.LOGIN_TO_PROCEED);
+                if(user.isLogged()){
+                    user.userInformation();
+                }
                 break;
             case 0:
+                user.setLogged(false);
                 System.exit(1);
                 break;
             default:
@@ -57,6 +73,8 @@ public class BibliotecaCLI {
         System.out.println("3 - Return Book");
         System.out.println("4 - Movies List");
         System.out.println("5 - Checkout Movie");
+        System.out.println("6 - Login");
+        System.out.println("7 - User Information");
         System.out.println("0 - Quit");
     }
 
@@ -72,10 +90,45 @@ public class BibliotecaCLI {
                 System.out.println();
                 printMenu();
             }catch (Exception e){
+                System.out.println("Message: " + e.getMessage());
+                System.out.println("Class: " + e.getClass());
                 System.out.println(Biblioteca.Messages.INVALID_OPTION);
                 menu();
             }
 
         }
     }
+
+    public void printBooKList() {
+        System.out.printf("%-30s | %-30s | %-5s%n", "TITLE", "AUTHOR", "YEAR");
+        for (Book objBook : biblioteca.bookList){
+            System.out.printf("%-30s | %-30s | %d%n", objBook.getTitle(), objBook.getAuthor(), objBook.getYear());
+        }
+    }
+
+    public void printMovieList() {
+        System.out.printf("%-30s | %-30s | %-4s | %s%n", "NAME", "DIRECTOR", "YEAR", "RATE");
+        for (Movie objMovie : biblioteca.movieList){
+            if (objMovie.getRate() == 0){
+                System.out.printf("%-30s | %-30s | %d | %s%n", objMovie.getName(), objMovie.getDirector(),
+                        objMovie.getYear(), "Unrated");
+            } else {
+                System.out.printf("%-30s | %-30s | %d | %d%n", objMovie.getName(), objMovie.getDirector(),
+                        objMovie.getYear(), objMovie.getRate());
+            }
+        }
+    }
+
+    public  void userLogin(String message) {
+        System.out.println(message);
+        String libraryNumber = readString("Library number: ");
+        String password = readString("Password: ");
+
+        if (biblioteca.login(libraryNumber, password)){
+            System.out.println(Biblioteca.Messages.SUCCESSFUL_LOGIN);
+        }else{
+            System.out.println(Biblioteca.Messages.UNSUCCESSFUL_LOGIN);
+        }
+    }
+
 }

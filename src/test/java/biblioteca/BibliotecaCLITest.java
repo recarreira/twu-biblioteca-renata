@@ -4,8 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
-
-import java.io.FileNotFoundException;
+import user.User;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,6 +13,7 @@ public class BibliotecaCLITest {
     Biblioteca biblioteca;
     BibliotecaCLI bibliotecaCLI;
     String bookDetails;
+    String movieDetails;
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -22,10 +22,16 @@ public class BibliotecaCLITest {
     public void setUp() throws Exception {
         biblioteca = new Biblioteca();
         BibliotecaData.populateWithBooks(biblioteca);
+        BibliotecaData.populateWithMovies(biblioteca);
         bibliotecaCLI = new BibliotecaCLI(biblioteca);
-        bookDetails =   "Learning TDD          | Cool Girl             | 2015\n" +
-                        "Awesome book          | author with huge name | 2014\n" +
-                        "Another awesome book  | myself                | 2013\n";
+        bookDetails =   "TITLE                          | AUTHOR                         | YEAR \n" +
+                        "Learning TDD                   | Cool Girl                      | 2015\n" +
+                        "Awesome book                   | author with huge name          | 2014\n" +
+                        "Another awesome book           | myself                         | 2013\n";
+        movieDetails =   "NAME                           | DIRECTOR                       | YEAR | RATE\n" +
+                "Some movie                     | Some Pretty Director           | 2012 | 10\n" +
+                "Another movie                  | Just a Director                | 2001 | Unrated\n" +
+                "Just another movie             | Unknown Director               | 2009 | 3\n";
     }
 
     @Test
@@ -37,13 +43,13 @@ public class BibliotecaCLITest {
 
     @Test
     public void printsBookListDetailsAsColumns(){
-        biblioteca.printBooKListDetails();
+        bibliotecaCLI.printBooKList();
 
         assertEquals(bookDetails, log.getLog());
     }
 
     @Test
-    public void printsBookListDetailsByChoosingMenuOption1(){
+    public void printsBookListByChoosingMenuOption1(){
         bibliotecaCLI.menuOptions(1);
 
         assertEquals(bookDetails, log.getLog());
@@ -64,10 +70,27 @@ public class BibliotecaCLITest {
                         "3 - Return Book\n" +
                         "4 - Movies List\n" +
                         "5 - Checkout Movie\n" +
+                        "6 - Login\n" +
+                        "7 - User Information\n" +
                         "0 - Quit\n";
         bibliotecaCLI.printMenu();
 
         assertEquals(menu, log.getLog());
+    }
+
+
+    @Test
+    public void printsMovieList(){
+
+        bibliotecaCLI.printMovieList();
+        assertEquals(movieDetails, log.getLog());
+    }
+
+
+    @Test
+    public void printsMovieListByChoosingMenuOption4(){
+        bibliotecaCLI.menuOptions(4);
+        assertEquals(movieDetails, log.getLog());
     }
 
 }

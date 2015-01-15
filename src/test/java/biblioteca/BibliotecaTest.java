@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import user.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +25,6 @@ public class BibliotecaTest {
     Book newBook = new Book("New book", "someone", 2010);
 
     Movie aMovie = new Movie("Some movie", "Some Pretty Director", 2012, 10);
-    Movie anotherMovie = new Movie("Another movie", "Just a Director", 2001, 0);
     Movie yetAnotherMovie = new Movie("Just another movie", "Unknown Director", 2009, 3);
 
 
@@ -168,4 +168,22 @@ public class BibliotecaTest {
 
         assertEquals(Biblioteca.Messages.UNSUCCESSFUL_MOVIE_CHECKOUT + "\n", log.getLog());
     }
+
+    @Test
+    public void loginSuccessful(){
+        BibliotecaData.createUsers(biblioteca);
+        assertTrue(biblioteca.login("000-0001", "1234"));
+    }
+
+    @Test
+    public void wrongPasswordLogin(){
+        assertFalse(biblioteca.login("000-0001", "wrong_password"));
+    }
+
+    @Test
+    public void wrongUserLogin(){
+        assertFalse(biblioteca.login("000-0009", "password"));
+    }
+
+
 }

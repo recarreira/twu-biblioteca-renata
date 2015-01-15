@@ -9,29 +9,24 @@ public class Movie {
     private int year;
     private int rate;
 
+    public String getDirector() {
+        return director;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
     public Movie(String name, String director, int year, int rate) {
         this.name = name;
         this.director = director;
         this.year = year;
+
         this.rate = rate;
-    }
-
-    public void printMovieDetails(int columnLength) {
-
-        String whitespaceName = new String(new char[columnLength - this.getName().length()]).replace("\0", " ");
-        String whitespaceDirector = new String(new char[columnLength - this.director.length()]).replace("\0", " ");
-
-        String details = "";
-        if (rate == 0){
-            details =   this.getName() + whitespaceName +" | " + this.director + whitespaceDirector +" | " + this.year +
-                        " | Unrated";
-        }else {
-            details = this.getName() + whitespaceName +" | " + this.director + whitespaceDirector + " | " +
-                      this.year + " | " + this.rate;
-        }
-
-        System.out.println(details);
-
     }
 
     @Override

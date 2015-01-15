@@ -31,14 +31,6 @@ public class Book {
         this.year = year;
     }
 
-    public void printBookDetails(int lengthColumn) {
-
-        String whitespaceTitle = new String(new char[lengthColumn - this.title.length()]).replace("\0", " ");
-        String whitespaceAuthor = new String(new char[lengthColumn - this.author.length()]).replace("\0", " ");
-
-        System.out.println(this.title + whitespaceTitle +" | " + this.author + whitespaceAuthor + " | " + this.year);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o instanceof Book){

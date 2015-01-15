@@ -2,8 +2,12 @@ package biblioteca;
 
 import book.Book;
 import movie.Movie;
+import user.User;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rcarreira on 1/11/15.
@@ -19,7 +23,10 @@ public class Biblioteca {
         public static final String UNSUCCESSFUL_RETURN = "That is not a valid book to return";
         public static final String CHECKOUT_MOVIE = "Thank you! Enjoy the movie";
         public static final String UNSUCCESSFUL_MOVIE_CHECKOUT = "That movie is not available";
-
+        public static final String SUCCESSFUL_LOGIN ="Login successful";
+        public static final String UNSUCCESSFUL_LOGIN = "Incorrect library number or password.";
+        public static final String LOGIN_TO_PROCEED = "You must login to proceed";
+        public static final String USER_NOT_FOUND = "User not found.";
 
     }
     public ArrayList<Book> bookList = new ArrayList<Book>();
@@ -27,26 +34,9 @@ public class Biblioteca {
 
     public ArrayList<Movie> movieList = new ArrayList<Movie>();
 
-    public void printBooKListDetails() {
-        int length = bookListMaxLengthString(bookList);
-        for (Book objBook : bookList){
-            objBook.printBookDetails(length);
-        }
-    }
+    public Map<String, User> users = new HashMap<String, User>();
 
-    public int bookListMaxLengthString(ArrayList<Book> arrayList){
-        int max = 0;
-        for(Book objBook:arrayList){
-            if (objBook.getTitle().length() > max ){
-                max = objBook.getTitle().length();
-            }
-
-            if (objBook.getAuthor().length() > max){
-                max = objBook.getAuthor().length();
-            }
-        }
-        return max;
-    }
+    User user;
 
     public boolean checkoutBook(String bookTitle) {
         int position = findBookObjectPositionByName(bookTitle, bookList);
@@ -122,10 +112,14 @@ public class Biblioteca {
         }
     }
 
-    public void printMovieListDetail(){
-        for (Movie objMovie:movieList){
-            objMovie.printMovieDetails(20);
+    public boolean login(String libraryNumber, String password){
+        if (users.containsKey(libraryNumber)){
+            if (users.get(libraryNumber).passwordMatch(password)){
+                user = users.get(libraryNumber);
+                return true;
+            }
         }
+        return false;
     }
 
 }
