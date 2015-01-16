@@ -8,8 +8,6 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 import user.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +27,7 @@ public class BibliotecaTest {
     Movie aMovie = new Movie("Some movie", "Some Pretty Director", 2012, 10);
     Movie yetAnotherMovie = new Movie("Just another movie", "Unknown Director", 2009, 3);
 
-
+    User user;
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
 
@@ -39,22 +37,23 @@ public class BibliotecaTest {
         bibliotecaCLI = new BibliotecaCLI(biblioteca);
         BibliotecaData.populateWithBooks(biblioteca);
         BibliotecaData.populateWithMovies(biblioteca);
+        user = new User("000-0001", "1234", "Somebody With a Name", "somebody@someemail.com", "8888-8888");
 
     }
 
     @Test
     public void returnsTrueForSuccessfulCheckoutBook() {
-        assertThat(biblioteca.checkoutBook("Another awesome book"), is(true));
+        assertThat(biblioteca.checkoutBook("Another awesome book", user), is(true));
     }
 
     @Test
     public void returnsFalseForUnsuccessfulCheckoutBook(){
-        assertThat(biblioteca.checkoutBook("Unavailable book"), is(false));
+        assertThat(biblioteca.checkoutBook("Unavailable book", user), is(false));
     }
 
     @Test
     public void printsSuccessMessageAfterSuccessfulBookCheckout(){
-        biblioteca.checkoutBook("Another awesome book");
+        biblioteca.checkoutBook("Another awesome book", user);
         assertEquals(Biblioteca.Messages.CHECKOUT_BOOK + "\n", log.getLog());
     }
 
@@ -63,7 +62,7 @@ public class BibliotecaTest {
         Map<String, Book> books = new HashMap<String, Book>();
         books.put(aBook.getTitle(), aBook);
         books.put(yetAnotherBook.getTitle(), yetAnotherBook);
-        biblioteca.checkoutBook("Awesome book");
+        biblioteca.checkoutBook("Awesome book", user);
         assertEquals(books, biblioteca.bookList);
     }
 
@@ -71,13 +70,13 @@ public class BibliotecaTest {
     public void addsBookToCheckedOutListAftercheckoutBook(){
         Map<String, Book> books = new HashMap<String, Book>();
         books.put(aBook.getTitle(), aBook);
-        biblioteca.checkoutBook("Learning TDD");
+        biblioteca.checkoutBook("Learning TDD", user);
         assertEquals(books, biblioteca.checkedOutBooks);
     }
 
     @Test
     public void printsUnsuccessfulMessageAfterUnsuccessfulCheckoutBook(){
-        biblioteca.checkoutBook("We don't have this book");
+        biblioteca.checkoutBook("We don't have this book", user);
         assertEquals(Biblioteca.Messages.UNSUCCESSFUL_BOOK_CHECKOUT + "\n", log.getLog());
     }
 
@@ -134,12 +133,12 @@ public class BibliotecaTest {
 
     @Test
     public void returnsTrueForSuccessfulCheckoutMovie(){
-        assertThat(biblioteca.checkoutMovie("Another movie"), is(true));
+        assertThat(biblioteca.checkoutMovie("Another movie", user), is(true));
     }
 
     @Test
     public void returnsFalseIfCheckoutMovieFail(){
-        assertThat(biblioteca.checkoutMovie("Not a movie"), is(false));
+        assertThat(biblioteca.checkoutMovie("Not a movie", user), is(false));
     }
 
     @Test
@@ -148,20 +147,20 @@ public class BibliotecaTest {
         movies.put(aMovie.getName(), aMovie);
         movies.put(yetAnotherMovie.getName(), yetAnotherMovie);
 
-        biblioteca.checkoutMovie("Another movie");
+        biblioteca.checkoutMovie("Another movie", user);
         assertEquals(movies, biblioteca.movieList);
     }
 
     @Test
     public void printsSuccessMessageAfterSuccessfulMovieCheckout(){
-        biblioteca.checkoutMovie("Just another movie");
+        biblioteca.checkoutMovie("Just another movie", user);
 
         assertEquals(Biblioteca.Messages.CHECKOUT_MOVIE + "\n", log.getLog());
     }
 
     @Test
     public void printsUnsuccessfulMessageAfterUnsuccessfulCheckoutMovie(){
-        biblioteca.checkoutMovie("Not a movie");
+        biblioteca.checkoutMovie("Not a movie", user);
 
         assertEquals(Biblioteca.Messages.UNSUCCESSFUL_MOVIE_CHECKOUT + "\n", log.getLog());
     }
@@ -169,37 +168,47 @@ public class BibliotecaTest {
     @Test
     public void loginSuccessful(){
         BibliotecaData.createUsers(biblioteca);
-        assertTrue(biblioteca.login("000-0001", "1234"));
+        assertEquals(user, biblioteca.login("000-0001", "1234"));
     }
 
     @Test
     public void wrongPasswordLogin(){
-        assertFalse(biblioteca.login("000-0001", "wrong_password"));
+        assertNull(biblioteca.login("000-0001", "wrong password"));
     }
 
     @Test
     public void wrongUserLogin(){
-        assertFalse(biblioteca.login("000-0009", "password"));
+        assertNull(biblioteca.login("000-000x", "password"));
     }
 
     @Test
-    public void whoCheckedOutMovie(){
-        User user = new User("000-0009", "passwd", "y Name", "name@name.com", "9999-9999");
-        biblioteca.user = user;
-        biblioteca.checkoutMovie("Some movie");
+    public void movieCheckedOutByListPopulatedWithUserAndBookMovieForSuccessfulCheckout(){
+        biblioteca.checkoutMovie("Some movie", user);
         Map<String, String> testMovieCheckedOutBy = new HashMap<String, String>();
         testMovieCheckedOutBy.put("Some movie", user.getLibraryNumber());
         assertEquals(testMovieCheckedOutBy, biblioteca.movieCheckedOutBy);
     }
 
     @Test
-    public void whoCheckedOutMovieWhencheckOutFails(){
-        User user = new User("000-0009", "passwd", "y Name", "name@name.com", "9999-9999");
-        biblioteca.user = user;
-        biblioteca.checkoutMovie("Some movie");
+    public void movieCheckedOutByListNotPopulatedWithUserAndMovieNameForUnsuccessfulCheckout(){
+        biblioteca.checkoutMovie("Unavailable movie", user);
         Map<String, String> testMovieCheckedOutBy = new HashMap<String, String>();
-        testMovieCheckedOutBy.put("Some movie", user.getLibraryNumber());
         assertEquals(testMovieCheckedOutBy, biblioteca.movieCheckedOutBy);
+    }
+
+    @Test
+    public void bookCheckedOutByListPopulatedWithUserAndBookNameForSuccessfulCheckout(){
+        biblioteca.checkoutBook("Awesome book", user);
+        Map<String, String> checkedOutBooks = new HashMap<String, String>();
+        checkedOutBooks.put("Awesome book", user.getLibraryNumber());
+        assertEquals(checkedOutBooks, biblioteca.bookCheckedOutBy);
+    }
+
+    @Test
+    public void bookCheckedOutByListNotPopulatedWithUserAndBookNameForUnsuccessfulCheckout(){
+        biblioteca.checkoutBook("Unavailable book", user);
+        Map<String, String> checkedOutBooks = new HashMap<String, String>();
+        assertEquals(checkedOutBooks, biblioteca.bookCheckedOutBy);
     }
 
 

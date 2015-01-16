@@ -50,4 +50,16 @@ public class User {
     public String getLibraryNumber() {
         return libraryNumber;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof User){
+            User c = (User) o;
+            if (this.name.equals(c.name) && this.password.equals(c.password) && this.email.equals(c.email) &&
+                    this.phone.equals(c.phone) && this.libraryNumber.equals(libraryNumber)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -35,24 +35,27 @@ public class Biblioteca {
     public Map<String, String> bookCheckedOutBy = new HashMap<String, String>();
     public Map<String, String> movieCheckedOutBy = new HashMap<String, String>();
 
-    User user;
+    public boolean checkoutBook(String bookTitle, User user) {
+        if (user != null){
+            if (bookList.containsKey(bookTitle)) {
 
-    public boolean checkoutBook(String bookTitle) {
-        if (bookList.containsKey(bookTitle)) {
+                checkedOutBooks.put(bookTitle, bookList.get(bookTitle));
+                bookList.remove(bookTitle);
+                bookCheckedOutBy.put(bookTitle, user.getLibraryNumber());
+                System.out.println(Messages.CHECKOUT_BOOK);
+                return true;
+            }else {
+                System.out.println(Messages.UNSUCCESSFUL_BOOK_CHECKOUT);
+                return false;
+            }
 
-            checkedOutBooks.put(bookTitle, bookList.get(bookTitle));
-            bookList.remove(bookTitle);
-            bookCheckedOutBy.put(bookTitle, user.getLibraryNumber());
-
-            System.out.println(Messages.CHECKOUT_BOOK);
-            return true;
         }else {
-            System.out.println(Messages.UNSUCCESSFUL_BOOK_CHECKOUT);
-            return false;
+            System.out.println("You need to be logged in order to checkout.");
         }
+        return false;
     }
 
-    public Boolean checkoutMovie(String movieName) {
+    public Boolean checkoutMovie(String movieName, User user) {
         if (movieList.containsKey(movieName)) {
             movieList.remove(movieName);
             movieCheckedOutBy.put(movieName, user.getLibraryNumber());
@@ -79,12 +82,12 @@ public class Biblioteca {
         }
     }
 
-    public boolean login(String libraryNumber, String password){
-            if (users.containsKey(libraryNumber)){if (users.get(libraryNumber).passwordMatch(password)){
-                user = users.get(libraryNumber);
-                return true;
+    public User login(String libraryNumber, String password){
+            if (users.containsKey(libraryNumber)){
+                if (users.get(libraryNumber).passwordMatch(password)){
+                    return users.get(libraryNumber);
             }
         }
-        return false;
+        return null;
     }
 }

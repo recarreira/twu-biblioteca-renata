@@ -14,7 +14,7 @@ import java.util.Set;
 public class BibliotecaCLI {
 
     Biblioteca biblioteca;
-    User user = new User("DefUser", "-1", "-1", "@", "78098233");
+    private User user;
 
 
     public BibliotecaCLI(Biblioteca biblioteca) {
@@ -37,8 +37,10 @@ public class BibliotecaCLI {
                 printBooKList();
                 break;
             case 2:
-                userLogin(Biblioteca.Messages.LOGIN_TO_PROCEED);
-                biblioteca.checkoutBook(readString("Type book title: "));
+                if (userIsNull()) {
+                    userLogin(Biblioteca.Messages.LOGIN_TO_PROCEED);
+                }
+                biblioteca.checkoutBook(readString("Type book title: "), user);
                 break;
             case 3:
                 userLogin(Biblioteca.Messages.LOGIN_TO_PROCEED);
@@ -48,7 +50,7 @@ public class BibliotecaCLI {
                 printMovieList();
                 break;
             case 5:
-                biblioteca.checkoutMovie(readString("Type movie name: "));
+                biblioteca.checkoutMovie(readString("Type movie name: "), user);
                 break;
             case 6:
                 if (user.isLogged()){
@@ -65,7 +67,6 @@ public class BibliotecaCLI {
                 }
                 break;
             case 0:
-                user.setLogged(false);
                 System.exit(1);
                 break;
             default:
@@ -133,20 +134,23 @@ public class BibliotecaCLI {
     }
 
     public  void userLogin(String message) {
-           if (!user.isLogged()){
                System.out.println(message);
                String libraryNumber = readString("Library number: ");
                String password = readString("Password: ");
-
-               if (biblioteca.login(libraryNumber, password)){
-                   user = biblioteca.user;
+               user = biblioteca.login(libraryNumber, password);
+               if (user!=null){
                    user.setLogged(true);
                    System.out.println(Biblioteca.Messages.SUCCESSFUL_LOGIN);
                }else{
                    System.out.println(Biblioteca.Messages.UNSUCCESSFUL_LOGIN);
                }
-           }
-
     }
 
+    public boolean userIsNull(){
+        if (user == null){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
