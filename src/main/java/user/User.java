@@ -6,13 +6,12 @@ package user;
 public class User {
 
 
-
     String libraryNumber;
     String password;
     String name;
     String email;
     String phone;
-    boolean logged = false;
+    private boolean logged = false;
 
     public User(String libraryNumber, String password, String name, String email, String phone) {
         this.libraryNumber = libraryNumber;
@@ -40,15 +39,15 @@ public class User {
                 "Phone number: " + this.phone;
     }
 
-    public String getLibraryNumber() {
-        return libraryNumber;
-    }
-
     public void setLogged(boolean logged) {
         this.logged = logged;
     }
 
     public boolean isLogged() {
         return logged;
+    }
+
+    public String getLibraryNumber() {
+        return libraryNumber;
     }
 }

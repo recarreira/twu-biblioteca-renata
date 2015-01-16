@@ -1,7 +1,5 @@
-biblioteca/Biblioteca.class
-utils/BibliotecaUtils.class
-biblioteca/Messages.class
 biblioteca/BibliotecaCLI.class
+biblioteca/Biblioteca.class
 book/Book.class
 BibliotecaApp.class
 biblioteca/Biblioteca$Messages.class

@@ -15,15 +15,15 @@ import java.util.Scanner;
 public class BibliotecaData {
 
     public static void populateWithBooks(Biblioteca biblioteca){
-        biblioteca.bookList.add(new Book("Learning TDD", "Cool Girl", 2015));
-        biblioteca.bookList.add(new Book("Awesome book", "author with huge name", 2014));
-        biblioteca.bookList.add(new Book("Another awesome book", "myself", 2013));
+        biblioteca.bookList.put("Learning TDD",new Book("Learning TDD", "Cool Girl", 2015));
+        biblioteca.bookList.put("Awesome book",new Book("Awesome book", "author with huge name", 2014));
+        biblioteca.bookList.put("Another awesome book",new Book("Another awesome book", "myself", 2013));
     }
 
     public static void populateWithMovies(Biblioteca biblioteca){
-        biblioteca.movieList.add(new Movie("Some movie", "Some Pretty Director", 2012, 10));
-        biblioteca.movieList.add(new Movie("Another movie", "Just a Director", 2001, 0));
-        biblioteca.movieList.add(new Movie("Just another movie", "Unknown Director", 2009, 3));
+        biblioteca.movieList.put("Some movie", new Movie("Some movie", "Some Pretty Director", 2012, 10));
+        biblioteca.movieList.put("Another movie",new Movie("Another movie", "Just a Director", 2001, 0));
+        biblioteca.movieList.put("Just another movie",new Movie("Just another movie", "Unknown Director", 2009, 3));
     }
 
     public static void createUsers(Biblioteca biblioteca){

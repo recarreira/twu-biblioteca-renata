@@ -25,13 +25,13 @@ public class BibliotecaCLITest {
         BibliotecaData.populateWithMovies(biblioteca);
         bibliotecaCLI = new BibliotecaCLI(biblioteca);
         bookDetails =   "TITLE                          | AUTHOR                         | YEAR \n" +
-                        "Learning TDD                   | Cool Girl                      | 2015\n" +
                         "Awesome book                   | author with huge name          | 2014\n" +
+                        "Learning TDD                   | Cool Girl                      | 2015\n" +
                         "Another awesome book           | myself                         | 2013\n";
-        movieDetails =   "NAME                           | DIRECTOR                       | YEAR | RATE\n" +
-                "Some movie                     | Some Pretty Director           | 2012 | 10\n" +
-                "Another movie                  | Just a Director                | 2001 | Unrated\n" +
-                "Just another movie             | Unknown Director               | 2009 | 3\n";
+        movieDetails =  "NAME                           | DIRECTOR                       | YEAR | RATE\n" +
+                        "Another movie                  | Just a Director                | 2001 | Unrated\n" +
+                        "Just another movie             | Unknown Director               | 2009 | 3\n" +
+                        "Some movie                     | Some Pretty Director           | 2012 | 10\n";
     }
 
     @Test
@@ -69,7 +69,7 @@ public class BibliotecaCLITest {
                         "2 - Checkout Book\n" +
                         "3 - Return Book\n" +
                         "4 - Movies List\n" +
-                        "5 - Checkout Movie\n" +
+                "5 - Checkout Movie\n" +
                         "6 - Login\n" +
                         "7 - User Information\n" +
                         "0 - Quit\n";

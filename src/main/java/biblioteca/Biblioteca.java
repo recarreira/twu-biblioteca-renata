@@ -4,8 +4,6 @@ import book.Book;
 import movie.Movie;
 import user.User;
 
-import javax.jws.soap.SOAPBinding;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,24 +24,25 @@ public class Biblioteca {
         public static final String SUCCESSFUL_LOGIN ="Login successful";
         public static final String UNSUCCESSFUL_LOGIN = "Incorrect library number or password.";
         public static final String LOGIN_TO_PROCEED = "You must login to proceed";
-        public static final String USER_NOT_FOUND = "User not found.";
-
     }
-    public ArrayList<Book> bookList = new ArrayList<Book>();
-    public ArrayList<Book> checkedOutBooks = new ArrayList<Book>();
+    public Map<String, Book> bookList = new HashMap<String, Book>();
+    public Map<String, Book> checkedOutBooks = new HashMap<String, Book>();
 
-    public ArrayList<Movie> movieList = new ArrayList<Movie>();
+    public Map<String, Movie> movieList = new HashMap<String, Movie>();
 
     public Map<String, User> users = new HashMap<String, User>();
+
+    public Map<String, String> bookCheckedOutBy = new HashMap<String, String>();
+    public Map<String, String> movieCheckedOutBy = new HashMap<String, String>();
 
     User user;
 
     public boolean checkoutBook(String bookTitle) {
-        int position = findBookObjectPositionByName(bookTitle, bookList);
-        if (position != - 1) {
+        if (bookList.containsKey(bookTitle)) {
 
-            checkedOutBooks.add(bookList.get(position));
-            bookList.remove(position);
+            checkedOutBooks.put(bookTitle, bookList.get(bookTitle));
+            bookList.remove(bookTitle);
+            bookCheckedOutBy.put(bookTitle, user.getLibraryNumber());
 
             System.out.println(Messages.CHECKOUT_BOOK);
             return true;
@@ -54,10 +53,9 @@ public class Biblioteca {
     }
 
     public Boolean checkoutMovie(String movieName) {
-        int position = findMovieObjectPositionByName(movieName, movieList);
-        if (position != - 1) {
-            movieList.remove(position);
-
+        if (movieList.containsKey(movieName)) {
+            movieList.remove(movieName);
+            movieCheckedOutBy.put(movieName, user.getLibraryNumber());
             System.out.println(Messages.CHECKOUT_MOVIE);
             return true;
         } else {
@@ -66,43 +64,12 @@ public class Biblioteca {
         }
     }
 
-    public int findBookObjectPositionByName(String bookTitle, ArrayList<Book> listOfBooks){
-
-        int i = 0;
-        int position = -1;
-
-        for (Book objBook:listOfBooks){
-            if(objBook.getTitle().equals(bookTitle)){
-                position = i;
-                break;
-            }
-            i++;
-        }
-        return position;
-    }
-
-
-    public int findMovieObjectPositionByName(String movieName, ArrayList<Movie> listOfMovies){
-
-        int i = 0;
-        int position = -1;
-
-        for (Movie objMovie:listOfMovies){
-            if(objMovie.getName().equals(movieName)){
-                position = i;
-                break;
-            }
-            i++;
-        }
-        return position;
-    }
 
     public boolean returnBook(String bookTitle) {
-        int position = findBookObjectPositionByName(bookTitle, checkedOutBooks);
-        if (position != - 1) {
+        if (checkedOutBooks.containsKey(bookTitle)) {
 
-            bookList.add(checkedOutBooks.get(position));
-            checkedOutBooks.remove(position);
+            bookList.put(bookTitle, checkedOutBooks.get(bookTitle));
+            checkedOutBooks.remove(bookTitle);
 
             System.out.println(Messages.SUCCESSFUL_RETURN);
             return true;
@@ -113,13 +80,11 @@ public class Biblioteca {
     }
 
     public boolean login(String libraryNumber, String password){
-        if (users.containsKey(libraryNumber)){
-            if (users.get(libraryNumber).passwordMatch(password)){
+            if (users.containsKey(libraryNumber)){if (users.get(libraryNumber).passwordMatch(password)){
                 user = users.get(libraryNumber);
                 return true;
             }
         }
         return false;
     }
-
 }
