@@ -13,6 +13,9 @@ public class User {
     String phone;
     private boolean logged = false;
 
+
+    private boolean admin = false;
+
     public User(String libraryNumber, String password, String name, String email, String phone) {
         this.libraryNumber = libraryNumber;
         this.password = password;
@@ -45,6 +48,14 @@ public class User {
 
     public boolean isLogged() {
         return logged;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public String getLibraryNumber() {

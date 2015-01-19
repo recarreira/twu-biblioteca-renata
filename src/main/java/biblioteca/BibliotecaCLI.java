@@ -83,6 +83,7 @@ public class BibliotecaCLI {
         System.out.println("5 - Checkout Movie");
         System.out.println("6 - Login");
         System.out.println("7 - User Information");
+        System.out.println("8 - Rental Information");
         System.out.println("0 - Quit");
     }
 

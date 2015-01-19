@@ -69,9 +69,10 @@ public class BibliotecaCLITest {
                         "2 - Checkout Book\n" +
                         "3 - Return Book\n" +
                         "4 - Movies List\n" +
-                "5 - Checkout Movie\n" +
+                        "5 - Checkout Movie\n" +
                         "6 - Login\n" +
                         "7 - User Information\n" +
+                        "8 - Rental Information\n" +
                         "0 - Quit\n";
         bibliotecaCLI.printMenu();
 

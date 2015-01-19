@@ -40,6 +40,10 @@ public class BibliotecaApp {
         biblioteca.users.put("000-0001", aUser);
         biblioteca.users.put("000-0002", anotherUser);
         biblioteca.users.put("000-0003", yetAnotherUser);
+
+
+        User admin = new User("000-9999", "1234", "Admin", "admin@admin.com", "2345-2445");
+        admin.setAdmin(true);
     }
 
 }
